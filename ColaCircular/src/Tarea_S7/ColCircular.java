@@ -94,13 +94,15 @@ public class ColCircular {
 
         boolean continuar = true;
         while (continuar) {
-            System.out.println("\nOpciones:");
-            System.out.println("1. Encolar un elemento");
-            System.out.println("2. Desencolar un elemento");
-            System.out.println("3. Mostrar la cola");
-            System.out.println("4. Ver el primer elemento");
-            System.out.println("5. Salir");
-            System.out.print("Seleccione una opción: ");
+            String Menu = """
+                          ++++Opciones++++
+                          1. Encolar un elemento
+                          2. Desencolar un elemento
+                          3. Mostrar la cola
+                          4. Ver el primer elemento
+                          5. Salir
+                          Seleccione una opción: """;
+            System.out.println(Menu);
             int opcion = scanner.nextInt();
 
             switch (opcion) {
