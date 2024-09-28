@@ -1,5 +1,6 @@
 package Tarea_S7;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ColCircular {
@@ -17,7 +18,13 @@ public class ColCircular {
         finalCola = -1;
         size = 0;
     }
-
+    // Getters para acceder a los atributos
+    public int getCapacidad() {
+        return capacidad;
+    }
+    public int getTamanoActual() {
+        return size;
+    }
     // Método para verificar si la cola está vacía
     public boolean estaVacia() {
         return size == 0;
@@ -31,37 +38,32 @@ public class ColCircular {
     // Método para agregar un elemento a la cola
     public void encolar(int elemento) {
         if (estaLlena()) {
-            System.out.println("Cola llena. No se puede agregar el elemento " + elemento);
-        } else {
-            // Incrementa el finalCola de forma circular
-            finalCola = (finalCola + 1) % capacidad;
-            cola[finalCola] = elemento;
-            size++;
-            System.out.println("Elemento encolado: " + elemento);
+            throw new IllegalStateException("Cola llena. No se puede agregar el elemento.");
         }
+        // Incrementa el finalCola de forma circular
+        finalCola = (finalCola + 1) % capacidad;
+        cola[finalCola] = elemento;
+        size++;
+        System.out.println("Elemento encolado: " + elemento);
     }
 
     // Método para remover un elemento de la cola
     public int desencolar() {
         if (estaVacia()) {
-            System.out.println("Cola vacía. No se puede remover elementos.");
-            return -1;
-        } else {
-            int elemento = cola[frente];
-            frente = (frente + 1) % capacidad;
-            size--;
-            return elemento;
+            throw new NoSuchElementException("Cola vacía. No se puede remover elementos.");
         }
+        int elemento = cola[frente];
+        frente = (frente + 1) % capacidad;
+        size--;
+        return elemento;
     }
 
     // Método para ver el primer elemento sin eliminarlo
     public int verFrente() {
         if (estaVacia()) {
-            System.out.println("Cola vacía.");
-            return -1;
-        } else {
-            return cola[frente];
+            throw new NoSuchElementException("Cola vacía. No hay elementos para ver.");
         }
+        return cola[frente];
     }
 
     // Método para ver el tamaño actual de la cola
@@ -72,16 +74,15 @@ public class ColCircular {
     // Mostrar el estado de la cola
     public void mostrarCola() {
         if (estaVacia()) {
-            System.out.println("Cola vacía.");
-        } else {
-            System.out.print("Cola: ");
-            for (int i = 0; i < size; i++) {
-                System.out.print(cola[(frente + i) % capacidad] + " ");
-            }
-            System.out.println();
+            throw new NoSuchElementException("Cola vacía. No hay elementos para mostrar.");
         }
+        System.out.print("Cola: ");
+        for (int i = 0; i < size; i++) {
+            System.out.print(cola[(frente + i) % capacidad] + " ");
+        }
+        System.out.println();
     }
-
+    //Metodo principal
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -111,13 +112,12 @@ public class ColCircular {
                     System.out.print("Ingrese el elemento a encolar: ");
                     int elemento = scanner.nextInt();
                     cola.encolar(elemento);
+                    System.out.println("Elemento encolado: " + elemento);
                     break;
                 case 2:
                     // Desencolar un elemento
                     int desencolado = cola.desencolar();
-                    if (desencolado != -1) {
-                        System.out.println("Elemento desencolado: " + desencolado);
-                    }
+                    System.out.println("Elemento desencolado: " + desencolado);
                     break;
                 case 3:
                     // Mostrar la cola
@@ -126,19 +126,20 @@ public class ColCircular {
                 case 4:
                     // Ver el primer elemento sin desencolar
                     int frente = cola.verFrente();
-                    if (frente != -1) {
-                        System.out.println("Primer elemento en la cola: " + frente);
-                    }
+                    System.out.println("Primer elemento en la cola: " + frente);
                     break;
                 case 5:
                     // Salir del programa
                     continuar = false;
-                    System.out.println("Saliendo...");
+                    System.out.println("Saliendo del programa...");
                     break;
                 default:
                     System.out.println("Opción no válida. Intente de nuevo.");
             }
+        } catch (IllegalStateException | NoSuchElementException e) {
+            System.out.println(e.getMessage());
         }
+    }
         scanner.close();
     }
 }
